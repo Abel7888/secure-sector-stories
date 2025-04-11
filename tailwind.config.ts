@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,12 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				sector: {
+					healthcare: '#3B82F6', // blue
+					finance: '#10B981', // green
+					realestate: '#8B5CF6', // purple
+					supplychain: '#F59E0B', // amber
 				}
 			},
 			borderRadius: {
