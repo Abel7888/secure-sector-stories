@@ -10,10 +10,10 @@ const Footer: React.FC = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Shield className="h-6 w-6" />
-              <span className="text-xl font-bold">SecureSector</span>
+              <span className="text-xl font-bold"> Data Shield Blogs</span>
             </div>
             <p className="text-sm text-white/80 mb-4">
-              Expert insights on cybersecurity and emerging technologies across critical industries.
+              Expert insights on cybersecurity and emerging technologies across critical industries
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-white/80 hover:text-white">
