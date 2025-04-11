@@ -13,7 +13,7 @@ const Header: React.FC = () => {
         <div className="flex items-center gap-2">
           <Shield className="h-6 w-6 text-[#57dcb3]" />
           <Link to="/" className="text-xl font-bold text-foreground">
-            SecureSector
+            Data Shield Blogs
           </Link>
         </div>
 
