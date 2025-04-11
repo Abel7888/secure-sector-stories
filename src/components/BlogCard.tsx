@@ -6,11 +6,15 @@ import { Clock } from 'lucide-react';
 
 interface BlogCardProps {
   post: BlogPost;
+  onClick: () => void;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
+const BlogCard: React.FC<BlogCardProps> = ({ post, onClick }) => {
   return (
-    <div className="group overflow-hidden rounded-lg border bg-card shadow-sm transition-all hover:shadow-md">
+    <div 
+      className="group overflow-hidden rounded-lg border bg-card shadow-sm transition-all hover:shadow-md cursor-pointer"
+      onClick={onClick}
+    >
       <div className="relative h-48 w-full overflow-hidden">
         <img
           src={post.imageUrl}

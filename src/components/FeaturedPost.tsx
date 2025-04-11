@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button';
 
 interface FeaturedPostProps {
   post: BlogPost;
+  onClick: () => void;
 }
 
-const FeaturedPost: React.FC<FeaturedPostProps> = ({ post }) => {
+const FeaturedPost: React.FC<FeaturedPostProps> = ({ post, onClick }) => {
   return (
     <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-secondary to-primary text-white shadow-lg">
       <div className="absolute inset-0 bg-black/50"></div>
@@ -54,7 +55,11 @@ const FeaturedPost: React.FC<FeaturedPostProps> = ({ post }) => {
               </div>
             </div>
             <div className="mt-8">
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90">
+              <Button 
+                size="lg" 
+                className="bg-white text-primary hover:bg-white/90"
+                onClick={onClick}
+              >
                 Read Full Article <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
