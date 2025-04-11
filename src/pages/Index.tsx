@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import BlogCard from '@/components/BlogCard';
 import FeaturedPost from '@/components/FeaturedPost';
 import SectorFilter from '@/components/SectorFilter';
-import AboutSection from '@/components/AboutSection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getAllPosts, getFeaturedPosts, getPostsBySector, getPostsByContentType, Sector, ContentType } from '@/lib/blogData';
+import { getAllPosts, getFeaturedPosts, Sector, ContentType } from '@/lib/blogData';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -40,11 +39,8 @@ const Index = () => {
           </section>
         )}
         
-        {/* About Section */}
-        <AboutSection />
-        
         {/* Blog Posts Section */}
-        <section className="py-16" id="blog">
+        <section className="py-16">
           <div className="container px-4 mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
               <h2 className="text-3xl font-bold">Latest Content</h2>

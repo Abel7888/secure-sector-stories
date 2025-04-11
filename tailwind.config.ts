@@ -26,7 +26,7 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
+					DEFAULT: '#57dcb3',
 					foreground: 'hsl(var(--primary-foreground))'
 				},
 				secondary: {
@@ -68,7 +68,8 @@ export default {
 					finance: '#10B981', // green
 					realestate: '#8B5CF6', // purple
 					supplychain: '#F59E0B', // amber
-				}
+				},
+				theme: '#57dcb3', // Adding the theme color
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

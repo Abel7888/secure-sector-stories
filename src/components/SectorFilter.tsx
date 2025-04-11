@@ -35,6 +35,7 @@ const SectorFilter: React.FC<SectorFilterProps> = ({ selectedSector, setSelected
           onClick={() => setSelectedSector(option.id)}
           className={cn(
             "flex items-center gap-1.5",
+            selectedSector === option.id && option.id === 'all' && "bg-[#57dcb3] hover:bg-[#47c9a1]",
             selectedSector === option.id && option.id !== 'all' && 
             `bg-sector-${option.id} hover:bg-sector-${option.id}/90`
           )}

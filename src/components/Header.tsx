@@ -11,7 +11,7 @@ const Header: React.FC = () => {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
-          <Shield className="h-6 w-6 text-primary" />
+          <Shield className="h-6 w-6 text-[#57dcb3]" />
           <Link to="/" className="text-xl font-bold text-foreground">
             SecureSector
           </Link>
@@ -19,16 +19,10 @@ const Header: React.FC = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
-            Home
-          </Link>
-          <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">
-            About
-          </a>
-          <a href="#blog" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link to="/" className="text-sm font-medium hover:text-[#57dcb3] transition-colors">
             Blog
-          </a>
-          <Link to="/admin" className="text-sm font-medium hover:text-primary transition-colors">
+          </Link>
+          <Link to="/admin" className="text-sm font-medium hover:text-[#57dcb3] transition-colors">
             Admin
           </Link>
         </nav>
@@ -54,28 +48,14 @@ const Header: React.FC = () => {
           <nav className="container py-4 flex flex-col space-y-4">
             <Link 
               to="/" 
-              className="text-sm font-medium hover:text-primary transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <a 
-              href="#about" 
-              className="text-sm font-medium hover:text-primary transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </a>
-            <a 
-              href="#blog" 
-              className="text-sm font-medium hover:text-primary transition-colors"
+              className="text-sm font-medium hover:text-[#57dcb3] transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Blog
-            </a>
+            </Link>
             <Link 
               to="/admin" 
-              className="text-sm font-medium hover:text-primary transition-colors"
+              className="text-sm font-medium hover:text-[#57dcb3] transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Admin
