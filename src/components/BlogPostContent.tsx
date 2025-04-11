@@ -10,6 +10,40 @@ interface BlogPostContentProps {
   onBack: () => void;
 }
 
+const renderContent = (content: string) => {
+  const lines = content.split('\n');
+
+  return lines.map((line, index) => {
+    const trimmed = line.trim();
+
+    // Headings
+    if (trimmed.startsWith('### ')) {
+      return <h3 key={index} className="text-xl font-semibold mt-6 mb-2">{trimmed.replace('### ', '')}</h3>;
+    } else if (trimmed.startsWith('## ')) {
+      return <h2 key={index} className="text-2xl font-bold mt-8 mb-4">{trimmed.replace('## ', '')}</h2>;
+    } else if (trimmed.startsWith('# ')) {
+      return <h1 key={index} className="text-3xl font-bold mt-10 mb-6">{trimmed.replace('# ', '')}</h1>;
+    }
+
+    // Bullet Points
+    if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      return (
+        <ul key={index} className="list-disc list-inside mb-2">
+          <li>{trimmed.slice(2)}</li>
+        </ul>
+      );
+    }
+
+    // Empty line = spacing
+    if (trimmed === '') {
+      return <div key={index} className="my-4" />;
+    }
+
+    // Default paragraph
+    return <p key={index} className="mb-4">{trimmed}</p>;
+  });
+};
+
 const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, onBack }) => {
   return (
     <div className="container mx-auto px-4 py-8">
@@ -59,15 +93,13 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, onBack }) => {
           />
         </div>
       )}
-      
+
       <div className="prose prose-lg max-w-none">
-        {/* Render content in paragraphs for better readability */}
-        {post.content.split('\n\n').map((paragraph, index) => (
-          <p key={index} className="mb-4">{paragraph}</p>
-        ))}
+        {renderContent(post.content)}
       </div>
     </div>
   );
 };
 
 export default BlogPostContent;
+
