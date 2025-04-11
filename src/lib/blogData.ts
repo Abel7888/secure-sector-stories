@@ -1,4 +1,3 @@
-
 export type Sector = 'healthcare' | 'finance' | 'realestate' | 'supplychain';
 
 export type ContentType = 'blog' | 'case-study' | 'insight';
@@ -21,7 +20,7 @@ export interface BlogPost {
 }
 
 // Sample blog data
-export const blogPosts: BlogPost[] = [
+const initialBlogPosts: BlogPost[] = [
   {
     id: '1',
     title: 'Zero Trust Architecture in Healthcare: Protecting Patient Data',
@@ -104,33 +103,58 @@ export const blogPosts: BlogPost[] = [
   },
 ];
 
+// This will store all blog posts, including new ones
+let blogPosts: BlogPost[] = [...initialBlogPosts];
+
 // Function to get all posts
 export const getAllPosts = (): BlogPost[] => {
+  // Retrieve posts from localStorage if available
+  const storedPosts = localStorage.getItem('blogPosts');
+  if (storedPosts) {
+    blogPosts = JSON.parse(storedPosts);
+  }
   return blogPosts;
 };
 
 // Function to get featured posts
 export const getFeaturedPosts = (): BlogPost[] => {
-  return blogPosts.filter(post => post.featured);
+  const posts = getAllPosts();
+  return posts.filter(post => post.featured);
 };
 
 // Function to get posts by sector
 export const getPostsBySector = (sector: Sector): BlogPost[] => {
-  return blogPosts.filter(post => post.sector === sector);
+  return getAllPosts().filter(post => post.sector === sector);
 };
 
 // Function to get posts by content type
 export const getPostsByContentType = (type: ContentType): BlogPost[] => {
-  return blogPosts.filter(post => post.contentType === type);
+  return getAllPosts().filter(post => post.contentType === type);
 };
 
 // Function to get a post by ID
 export const getPostById = (id: string): BlogPost | undefined => {
-  return blogPosts.find(post => post.id === id);
+  return getAllPosts().find(post => post.id === id);
 };
 
-// In a real application, this would be an API call to save a new post
+// Function to save a new post
 export const savePost = (post: Omit<BlogPost, 'id'>): void => {
-  console.log('Saving post:', post);
-  // In a real app, this would make an API call to save the post
+  const newPost = {
+    ...post,
+    id: `${Date.now()}` // Generate a unique ID
+  };
+  
+  // Get current posts from localStorage
+  const currentPosts = getAllPosts();
+  
+  // Add new post to the array
+  currentPosts.unshift(newPost); // Add to the beginning to show newest first
+  
+  // Update blogPosts array
+  blogPosts = currentPosts;
+  
+  // Save updated posts to localStorage
+  localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+  
+  console.log('Post saved:', newPost);
 };

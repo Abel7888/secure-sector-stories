@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BlogCard from '@/components/BlogCard';
@@ -13,12 +13,27 @@ import { Input } from '@/components/ui/input';
 const Index = () => {
   const [selectedSector, setSelectedSector] = useState<Sector | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [posts, setPosts] = useState(getAllPosts());
+  const [featuredPosts, setFeaturedPosts] = useState(getFeaturedPosts());
   
-  const featuredPosts = getFeaturedPosts();
-  const allPosts = getAllPosts();
+  // Refresh posts when component mounts and when posts are added
+  useEffect(() => {
+    // Set up interval to check for new posts
+    const intervalId = setInterval(() => {
+      setPosts(getAllPosts());
+      setFeaturedPosts(getFeaturedPosts());
+    }, 2000); // Check every 2 seconds
+
+    // Initial load
+    setPosts(getAllPosts());
+    setFeaturedPosts(getFeaturedPosts());
+    
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
   
   // Filter posts by sector and search query
-  const filteredPosts = allPosts.filter(post => {
+  const filteredPosts = posts.filter(post => {
     const matchesSector = selectedSector === 'all' || post.sector === selectedSector;
     const matchesSearch = searchQuery === '' || 
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -69,41 +84,65 @@ const Index = () => {
               </TabsList>
               
               <TabsContent value="all">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPosts.map((post) => (
-                    <BlogCard key={post.id} post={post} />
-                  ))}
-                </div>
+                {filteredPosts.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredPosts.map((post) => (
+                      <BlogCard key={post.id} post={post} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-lg text-muted-foreground">No posts found matching your criteria.</p>
+                  </div>
+                )}
               </TabsContent>
               
               <TabsContent value="blog">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPosts
-                    .filter(post => post.contentType === 'blog')
-                    .map((post) => (
-                      <BlogCard key={post.id} post={post} />
-                    ))}
-                </div>
+                {filteredPosts.filter(post => post.contentType === 'blog').length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredPosts
+                      .filter(post => post.contentType === 'blog')
+                      .map((post) => (
+                        <BlogCard key={post.id} post={post} />
+                      ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-lg text-muted-foreground">No blog posts found matching your criteria.</p>
+                  </div>
+                )}
               </TabsContent>
               
               <TabsContent value="case-study">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPosts
-                    .filter(post => post.contentType === 'case-study')
-                    .map((post) => (
-                      <BlogCard key={post.id} post={post} />
-                    ))}
-                </div>
+                {filteredPosts.filter(post => post.contentType === 'case-study').length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredPosts
+                      .filter(post => post.contentType === 'case-study')
+                      .map((post) => (
+                        <BlogCard key={post.id} post={post} />
+                      ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-lg text-muted-foreground">No case studies found matching your criteria.</p>
+                  </div>
+                )}
               </TabsContent>
               
               <TabsContent value="insight">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPosts
-                    .filter(post => post.contentType === 'insight')
-                    .map((post) => (
-                      <BlogCard key={post.id} post={post} />
-                    ))}
-                </div>
+                {filteredPosts.filter(post => post.contentType === 'insight').length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredPosts
+                      .filter(post => post.contentType === 'insight')
+                      .map((post) => (
+                        <BlogCard key={post.id} post={post} />
+                      ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-lg text-muted-foreground">No insights found matching your criteria.</p>
+                  </div>
+                )}
               </TabsContent>
             </Tabs>
           </div>

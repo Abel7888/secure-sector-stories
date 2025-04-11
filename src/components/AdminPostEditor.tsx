@@ -24,6 +24,25 @@ const AdminPostEditor: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
+    // Validations
+    if (title.trim() === '') {
+      toast.error('Please enter a title for your post');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    if (excerpt.trim() === '') {
+      toast.error('Please enter an excerpt for your post');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    if (content.trim() === '') {
+      toast.error('Please enter content for your post');
+      setIsSubmitting(false);
+      return;
+    }
+    
     const newPost = {
       title,
       excerpt,
@@ -40,11 +59,10 @@ const AdminPostEditor: React.FC = () => {
       imageUrl: '/placeholder.svg'
     };
     
-    // In a real app, this would save to a backend
-    setTimeout(() => {
+    // Save the post
+    try {
       savePost(newPost);
       toast.success('Post created successfully!');
-      setIsSubmitting(false);
       
       // Reset form
       setTitle('');
@@ -54,7 +72,12 @@ const AdminPostEditor: React.FC = () => {
       setContentType('blog');
       setReadTime(5);
       setFeatured(false);
-    }, 1000);
+    } catch (error) {
+      toast.error('Failed to save post. Please try again.');
+      console.error('Error saving post:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
