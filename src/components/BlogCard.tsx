@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { BlogPost } from '@/lib/blogData';
+import { Post } from '@/lib/supabase';
 import CategoryBadge from './CategoryBadge';
 import { Clock } from 'lucide-react';
 
 interface BlogCardProps {
-  post: BlogPost;
+  post: Post;
   onClick: () => void;
 }
 

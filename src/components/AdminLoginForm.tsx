@@ -6,31 +6,50 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from '@/components/ui/label';
 import { Lock, Shield } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase, isAdmin } from '@/lib/supabase';
 
 interface AdminLoginFormProps {
   onLogin: () => void;
 }
 
 const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // This is just a mock authentication
-    // In a real app, you would call an API to validate credentials
-    setTimeout(() => {
-      if (username === 'admin' && password === 'admin') {
-        toast.success('Successfully logged in');
-        onLogin();
-      } else {
-        toast.error('Invalid credentials. Try admin/admin');
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (error) {
+        throw error;
       }
+      
+      // Check if user has admin privileges
+      if (!data.user) {
+        throw new Error('No user data returned');
+      }
+      
+      const adminCheck = await isAdmin(data.user.email || '');
+      
+      if (!adminCheck) {
+        throw new Error('User is not an admin');
+      }
+      
+      toast.success('Successfully logged in as admin');
+      onLogin();
+    } catch (error: any) {
+      console.error('Login error:', error);
+      toast.error(error.message || 'Invalid credentials. Please try again.');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -44,18 +63,19 @@ const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onLogin }) => {
           </div>
           <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials to access the admin dashboard
+            Enter your admin credentials to access the dashboard
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="username"
-                placeholder="admin"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                type="email"
+                placeholder="admin@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>

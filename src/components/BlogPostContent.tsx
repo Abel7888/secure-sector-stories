@@ -1,13 +1,16 @@
 
 import React from 'react';
-import { BlogPost } from '@/lib/blogData';
+import { Post } from '@/lib/supabase';
 import CategoryBadge from './CategoryBadge';
-import { Clock, ChevronLeft } from 'lucide-react';
+import { Clock, ChevronLeft, Share, Link } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 
 interface BlogPostContentProps {
-  post: BlogPost;
-  onBack: () => void;
+  post: Post;
+  onBack?: () => void;
+  standalone?: boolean;
 }
 
 const renderContent = (content: string) => {
@@ -44,12 +47,52 @@ const renderContent = (content: string) => {
   });
 };
 
-const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, onBack }) => {
+const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, onBack, standalone = false }) => {
+  const navigate = useNavigate();
+  
+  // Handle sharing functionality
+  const handleShare = async () => {
+    const postUrl = `${window.location.origin}/post/${post.slug || post.id}`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: post.title,
+          text: post.excerpt,
+          url: postUrl,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+        copyToClipboard(postUrl);
+      }
+    } else {
+      copyToClipboard(postUrl);
+    }
+  };
+  
+  // Fallback copy to clipboard
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+      .then(() => toast.success('Link copied to clipboard!'))
+      .catch((err) => {
+        console.error('Could not copy text: ', err);
+        toast.error('Failed to copy link');
+      });
+  };
+
+  const handleBackClick = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Button 
         variant="ghost" 
-        onClick={onBack} 
+        onClick={handleBackClick}
         className="mb-6 flex items-center"
       >
         <ChevronLeft className="mr-2 h-4 w-4" /> Back to all posts
@@ -60,9 +103,21 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, onBack }) => {
         <CategoryBadge type="contentType" value={post.contentType} />
       </div>
       
-      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-        {post.title}
-      </h1>
+      <div className="flex justify-between items-start mb-4">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 flex-1">
+          {post.title}
+        </h1>
+        
+        <Button
+          variant="outline"
+          size="icon"
+          className="ml-4"
+          onClick={handleShare}
+          title="Share this post"
+        >
+          <Share className="h-4 w-4" />
+        </Button>
+      </div>
       
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
@@ -97,9 +152,26 @@ const BlogPostContent: React.FC<BlogPostContentProps> = ({ post, onBack }) => {
       <div className="prose prose-lg max-w-none">
         {renderContent(post.content)}
       </div>
+      
+      {/* Shareable permalink section at the bottom */}
+      <div className="mt-12 pt-6 border-t border-gray-200">
+        <div className="flex items-center">
+          <div className="text-sm text-muted-foreground mr-2">Permalink:</div>
+          <div className="flex-1 bg-gray-100 rounded-md px-3 py-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {`${window.location.origin}/post/${post.slug || post.id}`}
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="ml-2"
+            onClick={() => copyToClipboard(`${window.location.origin}/post/${post.slug || post.id}`)}
+          >
+            <Link className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default BlogPostContent;
-
